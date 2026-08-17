@@ -1,0 +1,4 @@
+ip addr add 192.168.1.2/24 dev eth0
+ip link set eth0 up
+
+iptables -t raw -A OUTPUT -j NFQUEUE --queue-num 3 --queue-bypass
