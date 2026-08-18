@@ -1,0 +1,4 @@
+ip addr add 2.2.2.2/32 dev eth0
+ip route add 1.1.1.1 dev eth0
+ip route add default via 1.1.1.1
+ip link set eth0 up
