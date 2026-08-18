@@ -4,4 +4,13 @@ ip link set eth0 up
 dd if=/dev/urandom of=file.bin bs=1M count=1
 
 #Table-1
-iptables -t raw -A OUTPUT -d 10.10.10.3 -j NFQUEUE --queue-num 3 --queue-bypass
+#iptables -t raw -A OUTPUT -d 10.10.10.3 -j NFQUEUE --queue-num 3 --queue-bypass
+
+#Table-2
+#iptables -t raw -A OUTPUT -d 10.10.10.1 -j NFQUEUE --queue-num 3 --queue-bypass
+
+#Table-3
+
+#Table-4
+#iptables -t raw -A OUTPUT -d 10.10.10.3 -j NFQUEUE --queue-num 3 --queue-bypass
+
