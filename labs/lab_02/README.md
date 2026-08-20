@@ -65,11 +65,13 @@ time sh -c "cat file.bin | nc <IP_DESTINATARIO> 8080 -q1"
 ---
 
 ## 3. Soluzione tramite damper
+Prendiamo come esempio il nodo **pc1** nel caso della seconda tabella, il procedimento sarà lo stesso per gli altri nodi.
+
 #### Setup dei nodi su Kathara
 Fare riferimento ai file del repository.
 
 #### File damper.conf
-Modificare il file **/etc/damper/damper.conf**, per rispettare i parametri dell'esercizio.
+Modificare il file **/etc/damper/damper.conf**, per rallentare il traffico verso **pc2**, con la nfequeue numero 3.
 
 ```conf
 # nfqueue queue id
@@ -82,28 +84,42 @@ limit 1M
 packets 100
 ```
 
+Creare e modificare un nuovo file **/etc/damper/damper2.conf** (nome a scelta), per rallentare il traffico verso **pc3**, con la nfequeue numero 4.
+
+```conf
+# nfqueue queue id
+queue 4
+
+# traffic limit in bits per second (suffixes K and M allowed)
+limit 1M
+
+# queue length
+packets 100
+```
+
 In questo modo avremo un **rate** di 1Mbits/s per le comunicazioni slow, il numero di **packets** è stato lasciato a 100.
 
 ##### Nota Bene:
 Utilizzando una sola coda nfqueue, nel caso sia richieda di rallentare il traffico verso più di un nodo, i pacchetti saranno nella stessa coda anche se hanno destinazioni diverse.
-L'alternativa è assegnare pesi tramite i vari moduli, oppure creare due file **damper.conf**, per due nfequeue diverse, con due istanze di damper diverse.
+Per questo è necessario creare due file **damper.conf**, per due nfequeue diverse, con due istanze di damper diverse.
 
 
 #### Iptables
 Prima di avviare l'istanza di damper, bisogna creare le regole sulle **iptables** necessarie:
 
 ```bash
-iptables -t raw -A OUTPUT -d <IP_DESTINATARIO> -j NFQUEUE --queue-num 3 --queue-bypass
+iptables -t raw -A OUTPUT -d <IP_DESTINATARIO> -j NFQUEUE --queue-num <nfequeue_num> --queue-bypass
 ```
 
-In modo da catturare tutto il traffico in uscita verso il nodo che si desidera e assegnarlo alla nfequeue numero 3.
-Se il traffico deve essere rallentato verso più di un nodo, si può aggiungere un'altra regola con l'ip del destinatario corretto, sulla stessa nfequeue o su una diversa.
+In modo da catturare tutto il traffico in uscita verso il nodo che si desidera e assegnarlo alla nfequeue corretta.
+Se il traffico deve essere rallentato verso più di un nodo, si può aggiungere un'altra regola con l'ip del destinatario corretto, cambiando il numero della nfequeue.
 
 #### Istanza damper
-Per finire, sarà necessario avviare l'istanza di damper con il comando:
+Per finire, sarà necessario avviare le istanze di damper con il comando:
 
 ```bash
-damper /etc/damper/damper.conf &
+damper /etc/damper/damper_pc2.conf &
+damper /etc/damper/damper_pc3.conf &
 ```
 
 Per far partire lo shaper.
