@@ -5,4 +5,3 @@ ip link set eth0 up
 ip link set eth1 up
 
 iptables -A FORWARD -d 10.0.0.1 -j NFQUEUE --queue-num 3 --queue-bypass
-iptables -A FORWARD -d 10.0.0.2 -j NFQUEUE --queue-num 4 --queue-bypass
