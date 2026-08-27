@@ -7,7 +7,7 @@ RUN apt update && apt install -y --no-install-recommends \
     apt clean && rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
 WORKDIR /src
 RUN git clone --depth 1 https://github.com/Donati04/donper.git .
-RUN gcc -Wall -pedantic damper.c modules.conf.c -o donper -lnetfilter_queue -pthread -lrt -lm
+RUN gcc -Wall -pedantic damper.c modules.conf.c -o damper -lnetfilter_queue -pthread -lrt -lm
 
 # Immagine kathara/base
 FROM kathara/core:latest
@@ -23,10 +23,9 @@ RUN apt update && apt upgrade -y && apt install -y --no-install-recommends \
 RUN ln -s /etc/init.d/named /etc/init.d/bind
 COPY apache2.service /usr/lib/systemd/system/apache2.service
 
-RUN mkdir /etc/damper
-RUN mkdir -p /var/lib/damper
-COPY --from=damper /src/damper /usr/local/bin/damper
-COPY --from=damper /src/damper.conf /etc/damper/damper.conf
+RUN mkdir /etc/donper
+COPY --from=damper /src/damper /usr/local/bin/donper
+COPY --from=damper /src/damper.conf /etc/damper/donper.conf
 
 #Opzionale uno dei due o altra versione
 #RUN echo "alias donper='donper /etc/damper/damper.conf &'" >> /root/.bashrc
