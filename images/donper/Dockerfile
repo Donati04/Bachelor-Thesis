@@ -6,8 +6,8 @@ RUN apt update && apt install -y --no-install-recommends \
     build-essential && \
     apt clean && rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
 WORKDIR /src
-RUN git clone --depth 1 https://github.com/vmxdev/damper.git .
-RUN gcc -Wall -pedantic damper.c modules.conf.c -o damper -lnetfilter_queue -pthread -lrt -lm
+RUN git clone --depth 1 https://github.com/Donati04/donper.git .
+RUN gcc -Wall -pedantic damper.c modules.conf.c -o donper -lnetfilter_queue -pthread -lrt -lm
 
 # Immagine kathara/base
 FROM kathara/core:latest
@@ -29,5 +29,5 @@ COPY --from=damper /src/damper /usr/local/bin/damper
 COPY --from=damper /src/damper.conf /etc/damper/damper.conf
 
 #Opzionale uno dei due o altra versione
-#RUN echo "alias damper='damper /etc/damper/damper.conf &'" >> /root/.bashrc
-RUN echo "alias shaper='damper /etc/damper/damper.conf &'" >> /root/.bashrc
+#RUN echo "alias donper='donper /etc/damper/damper.conf &'" >> /root/.bashrc
+RUN echo "alias shaper='donper /etc/damper/damper.conf &'" >> /root/.bashrc
