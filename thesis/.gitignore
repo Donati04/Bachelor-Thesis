@@ -1,0 +1,20 @@
+# LaTeX
+*.aux
+*.log
+*.toc
+*.synctex.gz
+*.out
+*.fls
+*.fdb_latexmk
+*.listing
+main-blx.bib
+*.bbl
+*.bbl-SAVE-ERROR
+*.bcf
+*.bcf-SAVE-ERROR
+*.blg
+*.run.xml
+
+
+#Directory
+_minted/
