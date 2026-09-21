@@ -1,9 +1,0 @@
-  # Filtri per sito web
-  tc filter add dev eth0 protocol ip parent 1:0 prio 1 u32 match ip sport 80 0xffff flowid 1:10
-  tc filter add dev eth0 protocol ip parent 1:0 prio 1 u32 match ip sport 443 0xffff flowid 1:10
-
-  # Filtro per servizio streaming
-  tc filter add dev eth0 protocol ip parent 1:0 prio 2 u32 match ip sport 554 0xffff flowid 1:20
-
-  # Filtro per servizio file hosting
-  tc filter add dev eth0 protocol ip parent 1:0 prio 3 u32 match ip sport 21 0xffff flowid 1:30
