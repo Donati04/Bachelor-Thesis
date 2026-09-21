@@ -1,0 +1,130 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{Style/code_boxes}[2026/07/06 | Box per C, Pyhton, Bash e definizioni generiche]
+
+% Pacchetti necessari per i box
+\RequirePackage{listings}
+\RequirePackage{xcolor}
+\RequirePackage{tikz}
+\RequirePackage[many]{tcolorbox}
+
+\tcbuselibrary{listings}
+\usetikzlibrary{shadows}
+
+% Definizione colori personalizzati
+\definecolor{panna}{RGB}{255, 250, 245}
+\definecolor{forest_green}{RGB}{46,111,64}
+\definecolor{oceano}{RGB}{73, 77, 126}
+\definecolor{iceberg}{rgb}{0.44, 0.65, 0.82}
+\definecolor{light-gray}{gray}{0.96}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{commandcolor}{rgb}{0.1,0.1,0.7}
+
+\definecolor{pycomments}{rgb}{0.0, 0.5, 0.0}
+\definecolor{pystrings}{rgb}{0.13, 0.54, 0.13}
+\definecolor{pykeywords}{rgb}{0.0, 0.0, 0.8}
+\definecolor{pysocketmethods}{rgb}{0.63, 0.13, 0.94}
+
+% Stili dei listati
+\lstdefinestyle{shell}{
+    commentstyle=\color{codegreen},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\small,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    numbers=none,                    
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,         
+    tabsize=2,
+    language=bash,
+    classoffset=0,
+    morekeywords={sudo, apt-get, cd, ls, mkdir, repeat},
+    keywordstyle=\color{magenta},
+    classoffset=1,
+    morekeywords={chmod, chown, cat, more, less},
+    keywordstyle=\color{orange},
+    classoffset=2,
+    morekeywords={nc, ping, ifconfig, ssh, ipaddr, iproute, ip, link, route, brctl, dig},
+    keywordstyle=\color{blue},
+    classoffset=3,
+    morekeywords={donati@linux},
+    keywordstyle=\color{forest_green},
+    classoffset=0
+}
+
+\lstdefinestyle{customc}{
+    language=C,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    morekeywords={printf, scanf, malloc, free, socket, bind, listen, accept, read, write, close, strlen, strcpy},
+    keywordstyle=[2]\color{teal},
+    commentstyle=\color{codegreen},
+    stringstyle=\color{codepurple},
+    numbers=none,
+    breaklines=true,
+    tabsize=4,
+    showstringspaces=false
+}
+
+\lstdefinestyle{custompython}{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{pykeywords}\bfseries,
+    morekeywords=[2]{socket, bind, listen, accept, connect, send, recv, sendall, close, setsockopt, AF_INET, SOCK_STREAM, SOCK_DGRAM},
+    keywordstyle=[2]\color{pysocketmethods}\bfseries,
+    commentstyle=\color{pycomments}\itshape,
+    stringstyle=\color{pystrings},
+    numbers=none,
+    breaklines=true,
+    tabsize=4,
+    showstringspaces=false
+}
+
+% Creazione dei Box
+\newtcolorbox{boxDef}{
+    boxrule = 0.5pt, 
+    colframe=gray!30, 
+    colback=gray!5, 
+    width=0.95\textwidth,
+}
+
+\newtcblisting{bashbox}[1]{
+    listing only,
+    listing engine=listings,
+    listing options={style=shell}, 
+    before skip=8pt,    
+    after skip=8pt,     
+    top=2pt, bottom=2pt, left=5pt, right=5pt,
+    boxrule=0.5pt,
+    colback=gray!5,
+    colframe=gray!30,
+}
+
+\newtcblisting{cbox}[1]{
+    listing only,
+    listing engine=listings,
+    listing options={style=customc}, 
+    before skip=8pt,                
+    after skip=8pt,                 
+    top=2pt, bottom=2pt, left=5pt, right=5pt,
+    boxrule=0.5pt,
+    colback=gray!5,
+    colframe=gray!30,
+}
+
+\newtcblisting{pybox}[1]{
+    listing only,
+    listing engine=listings,
+    listing options={style=custompython}, 
+    before skip=8pt,                
+    after skip=8pt,                 
+    top=2pt, bottom=2pt, left=5pt, right=5pt,
+    boxrule=0.5pt,
+    colback=gray!5,
+    colframe=gray!30,
+}

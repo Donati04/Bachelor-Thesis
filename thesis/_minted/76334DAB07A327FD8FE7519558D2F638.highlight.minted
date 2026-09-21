@@ -1,0 +1,9 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{+w}{  }\PYG{c+c1}{\PYGZsh{} Clienti}
+\PYG{+w}{  }c1\PYG{o}{[}\PYG{l+m}{0}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}A\PYGZdq{}}
+\PYG{+w}{  }c2\PYG{o}{[}\PYG{l+m}{0}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}A\PYGZdq{}}
+\PYG{+w}{  }c3\PYG{o}{[}\PYG{l+m}{0}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}A\PYGZdq{}}
+
+\PYG{+w}{  }\PYG{c+c1}{\PYGZsh{} Server}
+\PYG{+w}{  }server\PYG{o}{[}\PYG{l+m}{0}\PYG{o}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}A\PYGZdq{}}
+\end{MintedVerbatim}

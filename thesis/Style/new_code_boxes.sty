@@ -1,0 +1,145 @@
+%---------------------------------------------------------------------
+%  Callout boxes
+%     \begin{defn}[title] ... \end{defn}        plum   — definitions
+%     \begin{thm}[title]  ... \end{thm}          rose   — theorems
+%     \begin{ex}[title]   ... \end{ex}           green  — worked examples
+%     \begin{intuition}[t]... \end{intuition}    gold   — the "why"
+%     \begin{props}[title]... \end{props}        pink   — rule lists
+%     \begin{note}[title] ... \end{note}         grey   — asides
+%     \begin{key} ... \end{key}                  centred boxed formula
+%  Build your own:  \begin{snote}{<colour>}{<title>} ... \end{snote}
+% ---------------------------------------------------------------------
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{Style/new_code_boxes}[2026/07/06 | Box per esempi di codice]
+
+\RequirePackage{minted}
+\RequirePackage{xcolor}
+
+\tcbuselibrary{minted}
+
+% Coloriper i box
+\definecolor{boxbg}{RGB}{237, 237, 237} % Sfondo box (light gray)
+\definecolor{matcha}{HTML}{43814F}      % Verde per gli esempi
+%\definecolor{celeste}{HTML}{1E88E5}
+\definecolor{celeste}{HTML}{1976D2}
+
+
+% Box per YAML
+\newtcblisting{yaml}[1][]{
+  enhanced, breakable, sharp corners,
+  colback=boxbg, coltext=black, boxrule=0pt, frame hidden,
+  borderline west={3pt}{0pt}{matcha},
+  left=14pt, right=12pt, top=9pt, bottom=10pt,
+  fonttitle=\sffamily\bfseries\color{matcha},
+  title={\bl{YAML}\ifstrempty{#1}{}{\hspace{0.7em}\textmd{\normalsize #1}}},
+  attach title to upper,
+  after title={\par\vskip3pt{\color{matcha!45}\hrule height0.5pt}\vskip7pt},
+  listing engine=minted,
+  minted language=yaml,
+  minted options={
+    fontsize=\small,
+    linenos=false,
+    breaklines=true
+  },
+  listing only
+}
+
+% Box per Java
+\newtcblisting{java}[1][]{
+  enhanced, breakable, sharp corners,
+  colback=boxbg, coltext=black, boxrule=0pt, frame hidden,
+  borderline west={3pt}{0pt}{matcha},
+  left=14pt, right=12pt, top=9pt, bottom=10pt,
+  fonttitle=\sffamily\bfseries\color{matcha},
+  title={\bl{Java}\ifstrempty{#1}{}{\hspace{0.7em}\textmd{\normalsize #1}}},
+  attach title to upper,
+  after title={\par\vskip3pt{\color{matcha!45}\hrule height0.5pt}\vskip7pt},
+  listing engine=minted,
+  minted language=java,
+  minted options={
+    fontsize=\small,
+    linenos=false,
+    breaklines=true
+  },
+  listing only
+}
+
+% Box per C
+\newtcblisting{clang}[1][]{
+  enhanced, breakable, sharp corners,
+  colback=boxbg, coltext=black, boxrule=0pt, frame hidden,
+  borderline west={3pt}{0pt}{matcha},
+  left=14pt, right=12pt, top=9pt, bottom=10pt,
+  fonttitle=\sffamily\bfseries\color{matcha},
+  title={\bl{C}\ifstrempty{#1}{}{\hspace{0.7em}\textmd{\normalsize #1}}},
+  attach title to upper,
+  after title={\par\vskip3pt{\color{matcha!45}\hrule height0.5pt}\vskip7pt},
+  listing engine=minted,
+  minted language=c,
+  minted options={
+    fontsize=\small,
+    linenos=false,
+    breaklines=true
+  },
+  listing only
+}
+ 
+% Box per Dockerfile
+\newtcblisting{docker}[1][]{
+  enhanced, breakable, sharp corners,
+  colback=boxbg, coltext=black, boxrule=0pt, frame hidden,
+  borderline west={3pt}{0pt}{matcha},
+  left=14pt, right=12pt, top=9pt, bottom=10pt,
+  fonttitle=\sffamily\bfseries\color{matcha},
+  title={\bl{Dockerfile}\ifstrempty{#1}{}{\hspace{0.7em}\textmd{\normalsize #1}}},
+  attach title to upper,
+  after title={\par\vskip3pt{\color{matcha!45}\hrule height0.5pt}\vskip7pt},
+  listing engine=minted,
+  minted language=docker,
+  minted options={
+    fontsize=\small,
+    linenos=false,
+    breaklines=true
+  },
+  listing only
+}
+
+% Box per comandi di rete (bash: ip, tc, iptables, ecc.)
+\newtcblisting{bash}[1][]{
+  enhanced, breakable, sharp corners,
+  colback=boxbg, coltext=black, boxrule=0pt, frame hidden,
+  borderline west={3pt}{0pt}{celeste},
+  left=14pt, right=12pt, top=9pt, bottom=10pt,
+  fonttitle=\sffamily\bfseries\color{celeste},
+  title={\bl{Bash}\ifstrempty{#1}{}{\hspace{0.7em}\textmd{\normalsize #1}}},
+  attach title to upper,
+  after title={\par\vskip3pt{\color{matcha!45}\hrule height0.5pt}\vskip7pt},
+  listing engine=minted,
+  minted language=bash,
+  minted options={
+    fontsize=\small,
+    linenos=false,
+    breaklines=true
+  },
+  listing only
+}
+
+% Box per comandi di rete (bash: ip, tc, iptables, ecc.)
+\newtcblisting{kathara}[1][]{
+  enhanced, breakable, sharp corners,
+  colback=boxbg, coltext=black, boxrule=0pt, frame hidden,
+  borderline west={3pt}{0pt}{celeste},
+  left=14pt, right=12pt, top=9pt, bottom=10pt,
+  fonttitle=\sffamily\bfseries\color{celeste},
+  title={\bl{Kathará}\ifstrempty{#1}{}{\hspace{0.7em}\textmd{\normalsize #1}}},
+  attach title to upper,
+  after title={\par\vskip3pt{\color{matcha!45}\hrule height0.5pt}\vskip7pt},
+  listing engine=minted,
+  minted language=bash,
+  minted options={
+    fontsize=\small,
+    linenos=false,
+    breaklines=true
+  },
+  listing only
+}

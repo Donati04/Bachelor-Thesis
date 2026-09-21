@@ -1,0 +1,97 @@
+\documentclass[openany]{book}
+
+% Dimensione pagina e margini
+% 'a4paper' è lo standard EU/UK, altrimenti metti altro
+\usepackage[a4paper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Lista package utili generici
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=black]{hyperref}
+\usepackage[italian]{babel}
+\usepackage{color,soul}
+\usepackage{cancel}
+\usepackage{wrapfig}
+\usepackage{caption}
+\usepackage{forest}
+\usepackage{tikz-qtree}
+\usepackage[utf8]{inputenc}
+
+% Box per definizioni, c, python e bash
+\usepackage{Style/code_boxes}
+
+% Box per codice simile a math_boxes
+\usepackage{Style/new_code_boxes}
+
+% Box per matemarica
+\usepackage{Style/math_boxes}
+
+% Per bibliografia
+\usepackage{csquotes}
+\usepackage[backend=biber, style=numeric, sorting=none]{biblatex}
+\addbibresource{ref.bib}
+
+% Titolo indice più grande
+\renewcommand{\contentsname}{\huge{Indice}}
+
+% Le pagine vuote non hanno numero
+\makeatletter
+\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else
+\hbox{}
+\thispagestyle{empty}
+\newpage
+\if@twocolumn\hbox{}\newpage\fi\fi\fi}
+\makeatother
+
+
+%------------------------------------------------
+%	Inizio documento
+%------------------------------------------------
+\begin{document}
+
+%------------------------------------------------
+%	Copertina
+%------------------------------------------------
+\begin{titlepage}
+  \begin{center}
+    \includegraphics[width=15cm]{Images/Unimore.jpg} \\
+    \vspace{1cm}
+    {\LARGE{ UNIVERSITÀ DEGLI STUDI DI MODENA \\E REGGIO EMILIA \\}}
+    {\large{ Dipartimento di Ingegneria "Enzo Ferrari" \\}}
+    {\large{ Corso di Laurea Triennale in Ingegneria Informatica (L-08) \\}}
+    \vspace{3cm}
+    {\Large { \textbf{Traffic Shaping in Userspace: Fattibilità e Limiti} }}\\
+    \vspace{3cm}
+  \end{center}
+  \begin{minipage}[t]{0.47\textwidth}
+    {\large{\bf Tutor:}\\} 
+    {\large Prof. Riccardo Lancellotti}
+  \end{minipage}\hfill\begin{minipage}[t]{0.47\textwidth}\raggedleft
+  {\large{\bf Candidato:}\\}
+  {\large Leonardo Donati}\\
+  {\large Matricola 191271}
+  \end{minipage}
+  \vfill
+  \hrulefill\\
+  \centering{\large{\bf ANNO ACCADEMICO 2025/2026 }}
+ \end{titlepage}
+
+%------------------------------------------------
+%	Indice
+%------------------------------------------------
+\newpage
+\centering
+\tableofcontents
+
+%------------------------------------------------
+%	Inizio appunti
+%------------------------------------------------
+\raggedright
+\input{Sections/intro.tex}
+\input{Sections/shaping.tex}
+\input{Sections/kathara.tex}
+
+\printbibliography[title={Bibliografia}] 
+
+\end{document}

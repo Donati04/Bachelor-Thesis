@@ -1,0 +1,7 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{+w}{  }\PYG{c+c1}{\PYGZsh{} Assegnare un ip}
+\PYG{+w}{  }ip\PYG{+w}{ }addr\PYG{+w}{ }add\PYG{+w}{ }\PYG{l+m}{192}.168.1.1/24\PYG{+w}{ }dev\PYG{+w}{ }eth0
+
+\PYG{+w}{  }\PYG{c+c1}{\PYGZsh{} Accendere l\PYGZsq{}interfaccia eth0}
+\PYG{+w}{  }ip\PYG{+w}{ }link\PYG{+w}{ }\PYG{n+nb}{set}\PYG{+w}{ }dev\PYG{+w}{ }eth0\PYG{+w}{ }up
+\end{MintedVerbatim}

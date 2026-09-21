@@ -1,0 +1,11 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{+w}{  }\PYG{c+c1}{\PYGZsh{} Filtri per sito web}
+\PYG{+w}{  }tc\PYG{+w}{ }filter\PYG{+w}{ }add\PYG{+w}{ }dev\PYG{+w}{ }eth0\PYG{+w}{ }protocol\PYG{+w}{ }ip\PYG{+w}{ }parent\PYG{+w}{ }\PYG{l+m}{1}:0\PYG{+w}{ }prio\PYG{+w}{ }\PYG{l+m}{1}\PYG{+w}{ }u32\PYG{+w}{ }match\PYG{+w}{ }ip\PYG{+w}{ }sport\PYG{+w}{ }\PYG{l+m}{80}\PYG{+w}{ }0xffff\PYG{+w}{ }flowid\PYG{+w}{ }\PYG{l+m}{1}:10
+\PYG{+w}{  }tc\PYG{+w}{ }filter\PYG{+w}{ }add\PYG{+w}{ }dev\PYG{+w}{ }eth0\PYG{+w}{ }protocol\PYG{+w}{ }ip\PYG{+w}{ }parent\PYG{+w}{ }\PYG{l+m}{1}:0\PYG{+w}{ }prio\PYG{+w}{ }\PYG{l+m}{1}\PYG{+w}{ }u32\PYG{+w}{ }match\PYG{+w}{ }ip\PYG{+w}{ }sport\PYG{+w}{ }\PYG{l+m}{443}\PYG{+w}{ }0xffff\PYG{+w}{ }flowid\PYG{+w}{ }\PYG{l+m}{1}:10
+
+\PYG{+w}{  }\PYG{c+c1}{\PYGZsh{} Filtro per servizio streaming}
+\PYG{+w}{  }tc\PYG{+w}{ }filter\PYG{+w}{ }add\PYG{+w}{ }dev\PYG{+w}{ }eth0\PYG{+w}{ }protocol\PYG{+w}{ }ip\PYG{+w}{ }parent\PYG{+w}{ }\PYG{l+m}{1}:0\PYG{+w}{ }prio\PYG{+w}{ }\PYG{l+m}{2}\PYG{+w}{ }u32\PYG{+w}{ }match\PYG{+w}{ }ip\PYG{+w}{ }sport\PYG{+w}{ }\PYG{l+m}{554}\PYG{+w}{ }0xffff\PYG{+w}{ }flowid\PYG{+w}{ }\PYG{l+m}{1}:20
+
+\PYG{+w}{  }\PYG{c+c1}{\PYGZsh{} Filtro per servizio file hosting}
+\PYG{+w}{  }tc\PYG{+w}{ }filter\PYG{+w}{ }add\PYG{+w}{ }dev\PYG{+w}{ }eth0\PYG{+w}{ }protocol\PYG{+w}{ }ip\PYG{+w}{ }parent\PYG{+w}{ }\PYG{l+m}{1}:0\PYG{+w}{ }prio\PYG{+w}{ }\PYG{l+m}{3}\PYG{+w}{ }u32\PYG{+w}{ }match\PYG{+w}{ }ip\PYG{+w}{ }sport\PYG{+w}{ }\PYG{l+m}{21}\PYG{+w}{ }0xffff\PYG{+w}{ }flowid\PYG{+w}{ }\PYG{l+m}{1}:30
+\end{MintedVerbatim}

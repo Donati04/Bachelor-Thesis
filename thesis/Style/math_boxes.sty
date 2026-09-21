@@ -1,0 +1,55 @@
+%---------------------------------------------------------------------
+%  Callout boxes
+%     \begin{defn}[title] ... \end{defn}        plum   — definitions
+%     \begin{thm}[title]  ... \end{thm}          rose   — theorems
+%     \begin{ex}[title]   ... \end{ex}           green  — worked examples
+%     \begin{intuition}[t]... \end{intuition}    gold   — the "why"
+%     \begin{props}[title]... \end{props}        pink   — rule lists
+%     \begin{note}[title] ... \end{note}         grey   — asides
+%     \begin{key} ... \end{key}                  centred boxed formula
+%  Build your own:  \begin{snote}{<colour>}{<title>} ... \end{snote}
+% ---------------------------------------------------------------------
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{Style/math_boxes}[2026/07/06 | Box per teoremi, definizioni, esempi e note generiche generiche]
+
+\RequirePackage{xcolor}
+
+\newcommand{\bl}[1]{{\footnotesize\sffamily\MakeUppercase{#1}}}
+
+% Coloriper i box
+\definecolor{boxbg}{RGB}{237, 237, 237} % Sfondo box (light gray)
+\definecolor{inkdim}{HTML}{6A6370}      % Colore per le note (grigio)
+\definecolor{sakuradeep}{HTML}{B0466A}  % Rosa per i thm
+\definecolor{matcha}{HTML}{43814F}      % Verde per gli esempi
+
+% Base per i vari box
+\newtcolorbox{snote}[2]{%
+  enhanced, breakable, sharp corners,
+  colback=boxbg, coltext=black, boxrule=0pt, frame hidden,
+  borderline west={3pt}{0pt}{#1},
+  left=14pt, right=12pt, top=9pt, bottom=10pt,
+  fonttitle=\sffamily\bfseries\color{#1},
+  title={#2},
+  attach title to upper,
+  after title={\par\vskip3pt{\color{#1!45}\hrule height0.5pt}\vskip7pt},
+}
+
+% Definizione
+\newenvironment{defn}[1][]{\begin{snote}{brown}{\bl{Definition}\hspace{0.7em}\textmd{\normalsize #1}}}{\end{snote}}
+
+% Teorema
+\newenvironment{thm}[1][]{\begin{snote}{sakuradeep}{\bl{Theorem}\hspace{0.7em}\textmd{\normalsize #1}}}{\end{snote}}
+
+% Esempi
+\newenvironment{ex}[1][]{\begin{snote}{matcha}{\bl{Example}\hspace{0.7em}\textmd{\normalsize #1}}}{\end{snote}}
+
+% Intuizione
+\newenvironment{intuition}[1][]{\begin{snote}{iceberg}{\bl{Intuition}\hspace{0.7em}\textmd{\normalsize #1}}}{\end{snote}}
+
+% Note
+\newenvironment{note}[1][Note]{\begin{snote}{inkdim}{\bl{#1}}}{\end{snote}}
+
+% Per proposizioni, sono note di colore diverso
+%\newenvironment{props}[1][Properties]{\begin{snote}{sakura}{\bl{#1}}}{\end{snote}}
+
+
