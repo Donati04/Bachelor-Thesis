@@ -1,0 +1,209 @@
+\chapter{Kathará}
+\section{Introduzione}
+\begin{defn}[Kathará]
+  Kathará è un framework open source basato su container Docker che permette di creare, configurare ed eseguire reti virtuali,
+  integrando in un unico ambiente tecnologie come \textbf{SDN} (Software Defined Network) e \textbf{NFV} (Network Function Virtualization) \cite{8406267}.
+\end{defn}
+Ogni nodo di rete è simulato con un container. Il comportamento del nodo dipende dall'immagine usata,
+permettendo l'uso di protocolli tradizionali (OSPF, BGP, ecc), SDN o servizi applicativi (DNS, Apache, ecc).
+I vari dispositivi comunicano tra loro attraverso LAN virtuali di livello 2, riproducendo il comportamente di un collegamento fisico.\\
+\vspace*{0.01\textheight}
+La scelta di basarsi su container invece che su macchine virtuali, rende Kathará uno strumento molto leggero.
+Ogni container richiede risorse nettamente inferiori rispetto a una macchina virtuale tradizionale, permettendo di simulare topologie complesse su hardware meno performante.
+Inoltre, permette di sfruttare bene tecnologie come NFV (Network Function Virtualization), che utilizza funzioni software per sositutire dispositivi hardware,
+e SDN (Software Defined Network), che permette di separare la logica di controllo della rete, dalla logica di invio dei pacchetti.
+
+\section{Architettura di Kathará}
+L'architettura di Kathará è composta da tre moduli principali: \textbf{Scripts}, \textbf{Operations} e il \textbf{Container Platform Adapter} \cite{8406267}.
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.65\linewidth]{Images/kathara/Kathara.png}
+    \caption{Architettura di Kathará \cite{8406267}}
+\end{figure}
+\newpage
+Il modulo Scripts contiene le operazioni di base che utente può fare per avviare, fermare e mettere in pausa i nodi di rete. Si dividono in due tipologie:
+\begin{enumerate}
+  \item \textbf{ltools:} valgono per tutti i nodi inseriti nel file di configurazione (\texttt{lstart}, \texttt{lclean}).
+  \item \textbf{vtools:} valgono per un singolo nodo (\texttt{vstart}, \texttt{vclean}).
+\end{enumerate}
+Il modulo Operations, invece, racchiude alcune funzionalità che servono a Kathará per funzionare, come:
+\begin{itemize}
+  \item \textbf{Parser:} traduce i file di configurazione o i parametri passati da riga di comando in nodi della rete con eventuali collegamenti. 
+    Si occupa anche di tradurre ulteriori opzioni, come risorse assegnate a ogni nodo o immagini Docker da utilizzare.
+  \item \textbf{Start-Up Operations:} serve a garantire compabilità fra i diversi sistemi.
+  \item \textbf{Common Libraries:} genera una serie di operazioni indipendenti da eseguire.
+\end{itemize}
+Infine, il modulo del Container Platform Adapter converte i comandi generati in precedenza in direttive Docker (o altre piattoforme) per creare e collegare fra di loro i container.
+L'output dell'adapter ritorna al modulo Scripts, che lo invia al Docker daemon. \\
+\vspace*{0.01\textheight}
+Nei sistemi Unix, per ragioni di sicurezza, i comandi devono prima essere approvati da un wrapper che scarta qualsiasi comando non ritenuto sicuro.
+
+\section{Configurazione}
+Supponiamo di avere un rete con tre nodi: due host e uno switch. Tramite Kathará è possibile crearli e avviarli tramite riga di comando, con i vtools, oppure, tramite file di configurazione, con gli ltools \cite{8406267}.
+Questa seconda modilità è quella che userò per configurare la rete.\\
+\vspace*{0.01\textheight}
+Il primo file da creare è quello in cui vengono definiti i nodi e se necessario altre opzioni, come le immagini dei container Docker. 
+\begin{kathara}[lab.conf]
+  # Collegamento fra un host e porte dello swicth
+  pc1[0]="A"
+  sw1[0]="A"
+
+  pc2[0]="B"
+  sw1[1]="B"
+
+  # Immagine per lo switch
+  sw1[image]="kathara/quagga"
+\end{kathara}
+Successivamente, è possibile creare a avviare i container con il comando \texttt{kathara lstart}, partendo dalle immagini di default o da quelle specificate. 
+Kathará, inoltre, aprirà per ogni nodo un terminale, in modo da poter fare modifiche o test. \\
+\vspace*{0.01\textheight}
+In alternativa, è possibile creare dei file di configurazione per ogni nodo, scrivendo al suo interno una lista di comandi da far fare in automatico all'accensione del container.
+Per l'host \texttt{pc1}, nel suo file di configurazione si può assegnare un ip e accendere la rispettiva interfaccia.
+\begin{kathara}[pc1.startup]
+  # Assegnare un ip
+  ip addr add 192.168.1.1/24 dev eth0
+
+  # Accendere l'interfaccia eth0
+  ip link set dev eth0 up
+\end{kathara}
+Tramite questa modalità è possibile configurare pure il secondo host e lo swicth. Una volta digitato il comando \texttt{kathara lstart}, tutti i file di configurazione verrano usati per creare la rete.
+
+\subsection{Riproduzione dello scenario HTB in Kathará}
+Sfruttando Kathará, si possono riproporre gli esempi del capitolo precedente sull'utlizzo delle qdisc tramite il comando \texttt{tc}, testandolo con diversi nodi.
+In particolare, lo scenario su HTB è utile per dimostrare che è possibile fare traffic shaping con questo framework.
+\vspace*{0.01\textheight}
+Facendo riferimento allo scenario dell'esercizio \ref{sec:htb}, il primo file da creare sarà \texttt{lab.conf}, in cui dovranno essere definiti i tre clienti e il server con i servizi.
+\begin{kathara}[lab.conf]
+  # Clienti
+  c1[0] = "A"
+  c2[0] = "A"
+  c3[0] = "A"
+  
+  # Server
+  server[0] = "A"
+\end{kathara}
+Specificando per ognuno il dominio \texttt{"A"}, Kathará simulerà il comportamente di una rete locale con uno swicth che collega tutti i nodi.
+Successivamente, per ogni host, dovrà essere creato un file che conterrà tutti i comandi necessari per poter comunicare fra di loro e nel caso del server pure quelli utili per il traffci shaping.
+\begin{kathara}[c1.startup]
+  # Assegnazione ip
+  ip addr add 10.0.0.1/24 dev eth0
+
+  # Accensione interfaccia eth0
+  ip link set dev eth0 up
+\end{kathara}
+Questa configurazione sarà uguale anche per gli altri clienti, ad eccezzione dell'indirizzo ip differente. Invece, in \texttt{server.startup}, verranno inseriti pure i comandi con \texttt{tc}.
+\begin{bash}[server.startup]
+  # Assegnazione ip
+  ip addr add 10.0.0.10/24 dev eth0
+
+  # Accensione interfaccia eth0
+  ip link set dev eth0 up
+
+  # Nodo root e genitore
+  tc qdisc add dev eth0 root handle 1: htb default 30
+  tc class add dev eth0 parent 1: classid 1:1 htb rate 100mbit ceil 100mbit
+
+  # Classe sito web
+  tc class add dev eth0 parent 1:1 classid 1:10 htb rate 50mbit ceil 100mbit
+
+  # Classe servizio streaming
+  tc class add dev eth0 parent 1:1 classid 1:20 htb rate 35mbit ceil 60mbit
+
+  # Classe servizio file hosting
+  tc class add dev eth0 parent 1:1 classid 1:30 htb rate 15mbit ceil 20mbit
+\end{bash}
+Infine, all'interno di quest'ultimo file, o sul container una volta avviato, dovranno essere creati pure i filtri per classificare i flussi.
+\begin{bash}[server.startup]
+  # Filtri per sito web
+  tc filter add dev eth0 protocol ip parent 1:0 prio 1 u32 match ip sport 80 0xffff flowid 1:10
+  tc filter add dev eth0 protocol ip parent 1:0 prio 1 u32 match ip sport 443 0xffff flowid 1:10
+
+  # Filtro per servizio streaming
+  tc filter add dev eth0 protocol ip parent 1:0 prio 2 u32 match ip sport 554 0xffff flowid 1:20
+
+  # Filtro per servizio file hosting
+  tc filter add dev eth0 protocol ip parent 1:0 prio 3 u32 match ip sport 21 0xffff flowid 1:30
+\end{bash}
+
+\subsubsection{Risultati}
+Per capire gli effetti che il traffic shaping ha portato alla rete, è utile confrontare i tempi di invio di dati con o senza HTB. La formula per calcolare i tempi di invio ideali è:
+\[
+  t = \frac{\text{dim} \times 8}{\text{rate}}
+\]
+Sul nodo del server è stato creato un file di 100 MB e poi è stato posto in ascolto sulle tre porte: \texttt{443}, \texttt{554} e \texttt{21}. 
+Ogni client ha scaricato contemporaneamente il file, tramite il comando \texttt{nc}, collegandosi alla porta del proprio servizio. \\ 
+Per ciascun trasferimento è stato misurato il tempo reale.
+\begin{center}
+  \begin{tabular}{ |c|c|c| }
+    \hline
+    \textbf{Classe} & \textbf{Tempo Ideale} & \textbf{Tempo Reale} \\
+    \hline
+    1:10 & $\sim$ $16s$ & $19.20s$ \\
+    \hline
+    1:20 & $\sim$ $23s$ & $23.33s$ \\
+    \hline
+    1:30 & $\sim$ $53s$ & $48.47s$ \\
+    \hline
+  \end{tabular}
+\end{center}
+Nell'esempio, si può notare come la classe \texttt{1:30} abbia impiegato meno tempo di quello ideale. Questo è dovuto al fatto che,
+dopo che il primo cliente ha finito di leggere i \texttt{100MB} di file, le altre due classi si sono divise la banda tramite l'algoritmo di prestito. \\
+Inoltre, per capire l'effetto del traffic shaping nella rete, è utile guardare anche i risultati senza l'utilizzo di HTB.
+\begin{center}
+  \begin{tabular}{ |c|c|c| }
+    \hline
+    \textbf{Classe} & \textbf{Tempo} \\
+    \hline
+    Sito Web & $22.81s$ \\
+    \hline
+    Streaming & $23.04s$ \\
+    \hline
+    File Hosting & $24.64s$ \\
+    \hline
+  \end{tabular}
+\end{center}
+Si può notare come i tempi, simili tra loro, rappresentino un terzo della banda totale, ossia circa 33Mbit/s per ciascun nodo, 
+dato che $\frac{100 \text{MB} \times 8}{33 \text{Mbit}/s} = 24s$. \\
+\vspace*{0.01\textheight}
+In conclusione, applicando una disciplina di accodamento come HTB per fare traffic shaping,
+ha permesso al servizio del sito web di avere a disposizione una banda maggiore, terminando il trasferimento per primo. 
+Invece, ha rallentato il servizio di file hosting, dedicandogli una banda minore. \\
+L'utilizzo di Kathará per creare la rete, ha permesso di calcolare i tempi reali in una LAN nelle diverse modalità proposte.
+\begin{center}
+  \begin{tabular}{ |c|c|c|c| }
+    \hline
+    \textbf{Servizio} & \textbf{Tempo con HTB} & \textbf{Tempo senza HTB}\\
+    \hline
+    Sito Web & $19.20s$ & $22.81s$ \\
+    \hline
+    Streaming & $23.33s$ & $23.04s$ \\
+    \hline
+    File Hosting & $48.47s$ & $24.64s$ \\
+    \hline
+  \end{tabular}
+\end{center}
+
+\newpage
+\section{Dipendenza dai moduli del kernel host}
+L'uso di container Docker rende la simulazione leggera e flessibile, permettendo di scegliere per ogni nodo un'immagine diversa, ma crea un limite imporntante.
+A differenza delle macchine virtuali, i container non eseguono un kernel proprio, ma condividono quello dell'host su cui gira Docker, 
+ciò che un nodo può fare a livello di rete dipende dai moduli caricati nel kernel dell'host. \\
+\vspace*{0.01\textheight}
+Il comando tc, eseguito dentro un container, iniva solamente richieste al kernel, non implementa effettivamente le discipline di accodamento.
+Le qdisc, le classi e i filtri sono realizzati da diversi moduli del kernel:
+\begin{center}
+  \begin{tabular}{ |c|c| }
+    \hline
+    \textbf{Modulo} & \textbf{Descrizione} \\
+    \hline
+    \texttt{sch\_tbf} & Modulo per qdisc TBF \\
+    \hline
+    \texttt{sch\_htb} & Modulo per qdisc HTB \\
+    \hline
+    \texttt{cls\_u32} & Modulo per filtri \texttt{u32} \\
+    \hline
+  \end{tabular}
+\end{center}
+
+
+
