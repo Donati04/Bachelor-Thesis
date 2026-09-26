@@ -70,7 +70,7 @@ Tramite questa modalità è possibile configurare pure il secondo host e lo swic
 
 \subsection{Riproduzione dello scenario HTB in Kathará}
 Sfruttando Kathará, si possono riproporre gli esempi del capitolo precedente sull'utlizzo delle qdisc tramite il comando \texttt{tc}, testandolo con diversi nodi.
-In particolare, lo scenario su HTB è utile per dimostrare che è possibile fare traffic shaping con questo framework.
+In particolare, lo scenario su HTB è utile per dimostrare che è possibile fare traffic shaping con questo framework.\\
 \vspace*{0.01\textheight}
 Facendo riferimento allo scenario dell'esercizio \ref{sec:htb}, il primo file da creare sarà \texttt{lab.conf}, in cui dovranno essere definiti i tre clienti e il server con i servizi.
 \begin{kathara}[lab.conf]
@@ -185,12 +185,16 @@ L'utilizzo di Kathará per creare la rete, ha permesso di calcolare i tempi real
 
 \newpage
 \section{Dipendenza dai moduli del kernel host}
-L'uso di container Docker rende la simulazione leggera e flessibile, permettendo di scegliere per ogni nodo un'immagine diversa, ma crea un limite imporntante.
-A differenza delle macchine virtuali, i container non eseguono un kernel proprio, ma condividono quello dell'host su cui gira Docker, 
-ciò che un nodo può fare a livello di rete dipende dai moduli caricati nel kernel dell'host. \\
-\vspace*{0.01\textheight}
-Il comando tc, eseguito dentro un container, iniva solamente richieste al kernel, non implementa effettivamente le discipline di accodamento.
-Le qdisc, le classi e i filtri sono realizzati da diversi moduli del kernel:
+L'uso di container Docker rende la simulazione leggera e flessibile, permettendo di scegliere per ogni nodo un'immagine diversa, ma crea un limite importante.
+A differenza delle macchine virtuali, i container non eseguono un kernel proprio, ma condividono quello dell'host su cui gira Docker. 
+Ciò che un nodo può fare a livello di rete dipende dai moduli caricati nel kernel dell'host. \\
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Images/kathara/kernel.png}
+    \caption{Docker Container vs Virtual Machine}
+\end{figure}
+Il comando \texttt{tc}, eseguito dentro un container, iniva solamente richieste al kernel, non implementa effettivamente le discipline di accodamento.
+Le qdisc, le classi e i filtri sono realizzati da moduli del kernel \cite{tc}:
 \begin{center}
   \begin{tabular}{ |c|c| }
     \hline
@@ -204,6 +208,12 @@ Le qdisc, le classi e i filtri sono realizzati da diversi moduli del kernel:
     \hline
   \end{tabular}
 \end{center}
-
-
-
+Per controllare la disponibilità, è possibile farlo tramite il comando \texttt{lsmod}.\\
+L'assenza di questi moduli porta a diverse conseguenze:
+\begin{itemize}
+  \item \textbf{Errore nel container:} restituisce un errore al momento della creazione della qdisc.
+  \item \textbf{Non riproducibilità:} lo stesso scenario può funzionare su un host e non su un altro;
+  \item \textbf{Non portabilità:} sistemi operativi come Windows e MacOS richiedono l'uso di una virtual machine Linux \cite{docker-desktop} per usare Docker,
+    che potrebbe non includere tutti i moduli necessari.
+\end{itemize}
+Una soluzione potrebbe essere spostare lo shaping del traffico in userspace, come verrà spiegato nel capitolo \ref{cap:userspace}.

@@ -1,5 +1,5 @@
 \chapter{Traffic Shaping}
-
+\label{cap:tc}
 %  Definizione traffic shaping generale
 \section{Definizione}
 \begin{defn}[Traffic Shaping]
@@ -32,6 +32,7 @@ Il kernel può decidere di inviare un pacchetto di una classe invece che un'altr
 Eventualmente, le qdisc possono essere pure \textbf{classles}, potendo solo riordinare, ritardare o scartare pacchetti.
 
 \subsection{Token Bucket Filter (TBF)}
+\label{sec:tbf}
 \begin{defn}[Token Bucket Filter]
   Disciplina di accodamento \textbf{classles} disponibile per il controllo del traffico nel comando \texttt{tc}.
   Funziona puramente da shaper e non si occupa mai dello scheduling del traffico. \cite{tc-tbf}

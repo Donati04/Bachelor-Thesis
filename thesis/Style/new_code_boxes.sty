@@ -143,3 +143,43 @@
   },
   listing only
 }
+
+% Box per comandi di rete (bash: ip, tc, iptables, ecc.)
+\newtcblisting{damper}[1][]{
+  enhanced, breakable, sharp corners,
+  colback=boxbg, coltext=black, boxrule=0pt, frame hidden,
+  borderline west={3pt}{0pt}{celeste},
+  left=14pt, right=12pt, top=9pt, bottom=10pt,
+  fonttitle=\sffamily\bfseries\color{celeste},
+  title={\bl{Damper}\ifstrempty{#1}{}{\hspace{0.7em}\textmd{\normalsize #1}}},
+  attach title to upper,
+  after title={\par\vskip3pt{\color{matcha!45}\hrule height0.5pt}\vskip7pt},
+  listing engine=minted,
+  minted language=bash,
+  minted options={
+    fontsize=\small,
+    linenos=false,
+    breaklines=true
+  },
+  listing only
+}
+
+% Box per comandi di rete (bash: ip, tc, iptables, ecc.)
+\newtcblisting{donper}[1][]{
+  enhanced, breakable, sharp corners,
+  colback=boxbg, coltext=black, boxrule=0pt, frame hidden,
+  borderline west={3pt}{0pt}{celeste},
+  left=14pt, right=12pt, top=9pt, bottom=10pt,
+  fonttitle=\sffamily\bfseries\color{celeste},
+  title={\bl{Donper}\ifstrempty{#1}{}{\hspace{0.7em}\textmd{\normalsize #1}}},
+  attach title to upper,
+  after title={\par\vskip3pt{\color{matcha!45}\hrule height0.5pt}\vskip7pt},
+  listing engine=minted,
+  minted language=bash,
+  minted options={
+    fontsize=\small,
+    linenos=false,
+    breaklines=true
+  },
+  listing only
+}
