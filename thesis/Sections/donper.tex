@@ -434,3 +434,10 @@ Successivamente, con le stesse modalità degli esercizi dei capitoli scorsi, si 
 \end{figure}
 
 I tempi misurati si avvicinano a quelli ideali con velocità ceil quando gli altri client sono assenti, e a quelli con velocità rate quando tutti e tre sono attivi.
+
+\section{Considerazioni Finali}
+I risultati ottenuti confermano che Donper riesce a riprodurre, in userspace, un comportamento simile a quelli di HTB e TBF. 
+I tempi calcolati rispettano il rate garantito nel caso in cui i nodi siano tutti attivi e il ceil nel caso sia possibile il prestito, aggiungendo un overhead accettabile di circa 1,5/2 secondi. \\
+\vspace*{0.01\textheight}
+L'introduzione di una struttura gerarchica, unita all'utilizzo dell'algoritmo token bucket, risolve i principali limiti di Damper spiegati nella sezione \ref{sec:limiti}.
+La possibilità di gestire più flussi tramite un solo file, senza dover usare più istanze del programma, rende anche più semplice la gestione di più classi.

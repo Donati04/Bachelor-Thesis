@@ -1,1 +1,24 @@
 \chapter{Conclusione}
+Questo lavoro ha affrontato il problema del traffic shaping partendo dal suo funzionamento in ambienti Linux, 
+per poi spiegarne i limiti in contesti containerizzati e, infine, introducendo due alternative interamente in user space. \\
+\vspace*{0.01\textheight}
+Inizialmente, sono stati spiegati i concetti fondamentali sul traffic shaping in ambiente, tramite il comando \texttt{tc},
+spiegando le principali discipline di accodamento Hierarchical Token Bucket e Token Bucket Filter con scenari reali di utilizzo. \\ 
+\vspace*{0.01\textheight}
+Successivamente, è stato introdotto Kathará come ambiente di simulazione basato su container Docker, dimostrando, con esempi, il suo funzionamento.
+In questa parte, sono stati analizzati i principali limiti della contaneirizzazione, spiegando come il comando \texttt{tc} necessiti di moduli kernel per poter funzionare correttamente. \\
+\vspace*{0.01\textheight}
+Dopo aver analizzato il problema, si è lavorato su un approccio diverso, spostando tutto la logica shaping del traffico dal kernel space in user space. \\
+Il framework Netfilter, mettendo a disposizione le code NFQUEUE e il comando \texttt{iptables}, ha permesso di intercettare tutto il traffico dei processi dell'host, 
+permettendo a un processo in stato utente di gestire la logica di shaping. In particolare, è stato scelto di usare il programma Damper, che tramite la libreria \texttt{libnetfilter\_queue}, 
+implementa un algoritmo leaky bucket, per rallentare il traffico in uscita secondo diversi profili. \\
+\vspace*{0.01\textheight}
+Una volta dimostrata la fattibilità del nuovo approccio, si sono evidenziati i limiti strutturali sulla gestione di più flussi di traffico diversi, portando alla creazione di un suo fork: Donper.
+In particolare, è stato modificato l'applicativo originale, supportando la gestione di più classi di traffico e di un algoritmo di condivisione di banda inutilizzata.
+Inoltre, è stato sostituito l'utilizzo dell'algoritmo leaky bucket, in favore dell'algoritmo token bucket. \\
+\vspace*{0.01\textheight}
+Nel complesso, il lavoro dimostra che è possibile realizzare un traffic shaper, con funzioni simile a quelle offerte dal kernel Linux, interamente in userspace. \\ 
+Restano, però, alcuni limiti: il programma Donper, supporta solamente un albero a due livelli, con un nodo padre unico. Un ulteriore aspetto da considerare riguarda la scalabilità dell'approccio al crescere della velocità delle interfacce di rete.
+Le velocità di molte reti moderne, che possono raggiungere 2,5 o i 10 Gbit$/s$, potrebbero creare diversi problemi di bottleneck visto il numero di pacchetti al secondo da gestire. \\ 
+\vspace*{0.01\textheight}
+Un possibile sviluppo futuro potrebbe essere quello di valutare Donper in contesti più complessi, migliorando la gestione dei pacchetti, limitando il numero di context switch e sfruttando meglio l'utilizzo di thread.

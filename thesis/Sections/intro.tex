@@ -1,1 +1,13 @@
 \chapter{Introduzione}
+Il traffic shaping è una tecnica ampiamente utilizzata nelle reti informatiche per controllare la larghezza di banda disponibile a utenti, servizi o flussi di traffico specifici. 
+In ambienti Linux, è possibile tramite il comando \texttt{tc}, che agisce direttamente all'interno del kernel utilizzando diverse queueing discipline. \\
+\vspace*{0.01\textheight}
+Questo approccio presenta un limite in ambienti containerizzati: non disponendo di un kernel proprio, un container usa le funzionalità di rete messe a disposizione dal kernel dell'host.
+L'assenza dei moduli necessari al comando \texttt{tc} può quindi creare problemi con portabilità e riproducibilità di uno scenario di rete in diversi sistemi. \\
+\vspace*{0.01\textheight}
+L'obiettivo di questa tesi è verificare la fattibilità di un approccio alternativo, che sposti la logica di traffic shaping dal kernel allo spazio utente con il framework Netfilter e le code NFQUEUE. \\
+\vspace*{0.01\textheight}
+La tesi è strutturata come segue: il capitolo 2 introduce il traffic shaping in ambienti Linux, con le discipline di accodamento TBF e HTB.
+Il capitolo 3 mostra il funzionamento di Kathará, il programma usato per le simulazioni degli scenari di rete e i suoi limiti. Il capitolo 4 spiega l'approccio di traffic shaping in userspace e del framework Nelfilter. 
+Il capitolo 5 ne dimostra la fattibilità tramite il programma Damper, evidenziato i suoi limiti strutturali. 
+Infine, il capitolo 6 descrive in modo dettagliato il fork Donper, che permette di gestire classi e condivisione di banda in modo simile, ma non uguale, alla qdisc spiegate nel capitolo 1.
